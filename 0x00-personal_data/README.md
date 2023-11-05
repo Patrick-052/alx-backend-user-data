@@ -16,6 +16,9 @@ Encryption - is the process of encoding a message or information in such a way t
 - [logging documentation](https://docs.python.org/3/library/logging.html)
 - [bcrypt package](https://github.com/pyca/bcrypt/)
 - [Logging to Files, Setting Levels, and Formatting](https://www.youtube.com/watch?v=-ARI4Cz-awo)
+- [Re Module](https://docs.python.org/3/library/re.html)
+- [Mysql-connector](https://dev.mysql.com/doc/connector-python/en/)
+- [Sample Quiz(s)](https://docs.google.com/document/d/1vT1QKSYtOYSa7T_cQ7lnKB21-9ep68rGU4t-QOrf7u0/edit?usp=sharing)
 
                       ____   _  _____ ____  ___ ____ _  __
                      |  _ \ / \|_   _|  _ \|_ _/ ___| |/ /
