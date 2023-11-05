@@ -5,7 +5,7 @@ import os
 import re
 import logging
 from typing import List
-from mysql.connector import connection
+import mysql.connector
 
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -44,13 +44,14 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> connection.MySQLConnection:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Function that returns a connector to the database """
     try:
-        conn = connection.MySQLConnection(**config)
+        conn = mysql.connector.connect(**config)
     except Exception as e:
-        print(f"The error {e} was met while connecting to the database")
+        print(f"error connecting to database {config['host']}: {e}")
     else:
+        print("connection established")
         return conn
 
 
