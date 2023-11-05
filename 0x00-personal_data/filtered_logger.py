@@ -36,22 +36,44 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
     return logger
 
-
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """ Function that returns a connector to the database """
-    config = {
-        'user': os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
-        'password': os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
-        'host': os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-        'database': os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
-    }
+    """Function that returns a connector to the database"""
+    db_user = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    db_password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME", "my_db")
+    db_port = os.getenv('PERSONAL_DATA_DB_PORT', 3306)  # Default MySQL port
+
+    connector = None
+
     try:
-        conn = mysql.connector.connect(**config)
-    except Exception as e:
-        print(f"error connecting to database {config['host']}: {e}")
-    else:
-        print("connection established")
-        return conn
+        connector = mysql.connector.connect(
+            user=db_user,
+            password=db_password,
+            host=db_host,
+            port=db_port,
+            database=db_name,
+        )
+    except Error as e:
+        print(f"The error '{e}' occurred")
+
+    return connector
+
+# def get_db() -> mysql.connector.connection.MySQLConnection:
+#     """ Function that returns a connector to the database """
+#     config = {
+#         'user': os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+#         'password': os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
+#         'host': os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+#         'database': os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
+#     }
+#     try:
+#         conn = mysql.connector.connect(**config)
+#     except Exception as e:
+#         print(f"error connecting to database {config['host']}: {e}")
+#     else:
+#         print("connection established")
+#         return conn
 
 
 class RedactingFormatter(logging.Formatter):
