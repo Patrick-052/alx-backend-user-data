@@ -7,7 +7,14 @@ import logging
 from typing import List
 import mysql.connector
 
+
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+config = {
+    'user': os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+    'password': os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
+    'host': os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+    'database': os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
+}
 
 
 def filter_datum(fields: List[str],
@@ -39,12 +46,6 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Function that returns a connector to the database """
-    config = {
-        'user': os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
-        'password': os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
-        'host': os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-        'database': os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
-    }
     try:
         conn = mysql.connector.connect(**config)
     except Exception as e:
@@ -52,21 +53,6 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     else:
         print("connection established")
         return conn
-
-
-def main():
-    """ Main function """
-    db = get_db()
-    cur = db.cursor()
-    cur.execute("SELECT * FROM users;")
-    db_log = get_logger()
-    for row in cur:
-        message = f"name={row[0]}; email={row[1]}; phone={row[2]}; " + \
-            f"ssn={row[3]}; password={row[4]}; ip={row[5]}; " + \
-            f"last_login={row[6]}; user_agent={row[7]};"
-        db_log.info(message)
-    cur.close()
-    db.close()
 
 
 class RedactingFormatter(logging.Formatter):
@@ -88,3 +74,22 @@ class RedactingFormatter(logging.Formatter):
                             self.REDACTION,
                             super().format(record),
                             self.SEPARATOR)
+
+
+def main():
+    """ Main function """
+    db = get_db()
+    cur = db.cursor()
+    cur.execute("SELECT * FROM users;")
+    db_log = get_logger()
+    for row in cur:
+        message = f"name={row[0]}; email={row[1]}; phone={row[2]}; " + \
+            f"ssn={row[3]}; password={row[4]}; ip={row[5]}; " + \
+            f"last_login={row[6]}; user_agent={row[7]};"
+        db_log.info(message)
+    cur.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
