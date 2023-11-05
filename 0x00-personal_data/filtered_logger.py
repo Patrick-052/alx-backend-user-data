@@ -7,14 +7,7 @@ import logging
 from typing import List
 import mysql.connector
 
-
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
-config = {
-    'user': os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
-    'password': os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
-    'host': os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-    'database': os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
-}
 
 
 def filter_datum(fields: List[str],
@@ -46,6 +39,12 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Function that returns a connector to the database """
+    config = {
+        'user': os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+        'password': os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
+        'host': os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+        'database': os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
+    }
     try:
         conn = mysql.connector.connect(**config)
     except Exception as e:
