@@ -1,9 +1,9 @@
 # alx-backend-user-data
 
 ## 0x00-personal_data
-This project mainly involves logging and encryption of personal data.
-logging - means keeping a record of events that happen when some software is running and we can use those logs to understand the software's behavior while it was running.
-Encryption - is the process of encoding a message or information in such a way that only authorized parties can access it and those who are not authorized cannot.
+This project mainly involves logging and encryption of personal data.   
+logging - means keeping a record of events that happen when some software is running and we can use those logs to understand the software's behavior while it was running.    
+Encryption - is the process of encoding a message or information in such a way that only authorized parties can access it and those who are not authorized cannot.   
 
 ## Objectives
 - Examples of Personally Identifiable Information (PII)
