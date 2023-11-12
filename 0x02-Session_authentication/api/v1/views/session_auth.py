@@ -2,10 +2,10 @@
 """ Module of Session authentication views """
 
 from os import getenv
-from typing import Tuple
 from models.user import User
+from typing import Tuple, Dict
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import jsonify, request, abort
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
@@ -42,3 +42,21 @@ def login() -> Tuple[str, int]:
         return response
     else:
         return jsonify({"error": "wrong password"}), 401
+
+
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def logout() -> str:
+    """ DELETE /api/v1/auth_session/logout
+    JSON body:
+      - session_id
+    Return:
+      - Empty JSON if session_id is None
+      - 404 if session_id doesn't exist
+      - 200 and destroy session_id if it exists
+    """
+    from api.v1.app import auth
+    logout = auth.destroy_session(request)
+    if logout is False:
+        abort(404)
+    else:
+        return jsonify({}), 200
