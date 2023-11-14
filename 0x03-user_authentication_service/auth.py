@@ -34,7 +34,7 @@ class Auth:
 
     def _generate_uuid(self):
         """ Returns a string representation of a new UUID """
-        new_id = str(uuid4)
+        new_id = str(uuid4())
         return new_id
 
 
