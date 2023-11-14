@@ -31,21 +31,14 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """add user to database
-
-        Args:
-            email (string): email of user
-            hashed_password (string): password of user
-        Returns:
-            User: user created
-        """
+        """ Method that saves a new user to the database """
         if not email or not hashed_password:
-            return
-        user = User(email=email, hashed_password=hashed_password)
+            return None
+        new_user = User(email=email, hashed_password=hashed_password)
         session = self._session
-        session.add(user)
+        session.add(new_user)
         session.commit()
-        return user
+        return new_user
 
     def find_user_by(self, **kwargs) -> User:
         """find user by some arguments
