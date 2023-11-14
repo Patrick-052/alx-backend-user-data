@@ -3,6 +3,7 @@
 
 from db import DB
 from user import User
+from uuid import uuid4
 from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -30,6 +31,12 @@ class Auth:
             return checkpw(password.encode(), user.hashed_password)
         except NoResultFound:
             return False
+
+    @property
+    def _generate_uuid(self):
+        """ Returns a string representation of a new UUID """
+        new_id = str(uuid4)
+        return new_id
 
 
 def _hash_password(password: str) -> bytes:
