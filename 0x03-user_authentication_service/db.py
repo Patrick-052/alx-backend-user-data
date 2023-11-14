@@ -41,19 +41,30 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
-        """ Method that returns the first row found in the users table
-            as  filtered by the method’s input arguments """
-        if kwargs:
-            for k in kwargs.keys():
-                if not hasattr(User, k):
-                    raise InvalidRequestError
+        """find user by some arguments
 
-            user = self._session.query(User).filter_by(**kwargs).first()
-            if not user:
-                raise NoResultFound
-            return user
-        else:
-            raise InvalidRequestError
+        Returns:
+            User: user found or raise error
+        """
+        user = self._session.query(User).filter_by(**kwargs).first()
+        if not user:
+            raise NoResultFound
+        return user
+
+    # def find_user_by(self, **kwargs) -> User:
+    #     """ Method that returns the first row found in the users table
+    #         as  filtered by the method’s input arguments """
+    #     if kwargs:
+    #         for k in kwargs.keys():
+    #             if not hasattr(User, k):
+    #                 raise InvalidRequestError
+
+    #         user = self._session.query(User).filter_by(**kwargs).first()
+    #         if not user:
+    #             raise NoResultFound
+    #         return user
+    #     else:
+    #         raise InvalidRequestError
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """Update user
