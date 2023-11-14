@@ -41,59 +41,33 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
-        """find user by some arguments
+        """ Method that returns the first row found in the users table
+            as  filtered by the method’s input arguments """
+        if kwargs:
+            for k in kwargs.keys():
+                if not hasattr(User, k):
+                    raise InvalidRequestError
 
-        Returns:
-            User: user found or raise error
-        """
-        user = self._session.query(User).filter_by(**kwargs).first()
-        if not user:
-            raise NoResultFound
-        return user
-
-    # def find_user_by(self, **kwargs) -> User:
-    #     """ Method that returns the first row found in the users table
-    #         as  filtered by the method’s input arguments """
-    #     if kwargs:
-    #         for k in kwargs.keys():
-    #             if not hasattr(User, k):
-    #                 raise InvalidRequestError
-
-    #         user = self._session.query(User).filter_by(**kwargs).first()
-    #         if not user:
-    #             raise NoResultFound
-    #         return user
-    #     else:
-    #         raise InvalidRequestError
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if not user:
+                raise NoResultFound
+            return user
+        else:
+            raise InvalidRequestError
 
     def update_user(self, user_id: int, **kwargs) -> None:
-        """Update user
-
-        Args:
-            user_id (int): id of user
-        """
-        user = self.find_user_by(id=user_id)
-        for key, val in kwargs.items():
-            if key not in DATA:
-                raise ValueError
-            setattr(user, key, val)
-        self._session.commit()
-        return None
-
-    # def update_user(self, user_id: int, **kwargs) -> None:
-    #     """ Method that takes as argument a required user_id integer
-    #         and arbitrary keyword arguments, and updates the user specific
-    #         rows with values of the keyword arguments """
-    #     if kwargs:
-    #         user = self.find_user_by(id=user_id)
-    #         for k, v in kwargs.items():
-    #             if not hasattr(user, k):
-    #                 raise ValueError
-    #             setattr(user, k, v)
-    #         self._session.commit()
-    #     else:
-    #         raise ValueError
-
+        """ Method that takes as argument a required user_id integer
+            and arbitrary keyword arguments, and updates the user specific
+            rows with values of the keyword arguments """
+        if kwargs:
+            user = self.find_user_by(id=user_id)
+            for k, v in kwargs.items():
+                if not hasattr(user, k):
+                    raise ValueError
+                setattr(user, k, v)
+            self._session.commit()
+        else:
+            raise ValueError
 
 # """DB module
 # """
