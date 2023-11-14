@@ -32,7 +32,6 @@ class Auth:
         except NoResultFound:
             return False
 
-    @property
     def _generate_uuid(self):
         """ Returns a string representation of a new UUID """
         new_id = str(uuid4)
