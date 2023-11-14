@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """ SQLAlchemy model implementation """
 
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Integer, String, Sequence
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
