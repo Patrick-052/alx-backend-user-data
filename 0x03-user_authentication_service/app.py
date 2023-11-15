@@ -74,7 +74,7 @@ def profile() -> Tuple:
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
-def get_reset_password_token() -> Tuple:
+def get_reset_password_token() -> str:
     """ View that validates if an email is registered by generating a
         reset_token else it aborts with 403 status code """
     try:
