@@ -3,7 +3,7 @@
 
 from auth import Auth
 from typing import Union, Tuple
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 
 app = Flask(__name__)
 AUTH = Auth()
@@ -17,6 +17,8 @@ def basic_route() -> str:
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
 def users() -> Union[str, Tuple]:
+    """ View implementing existence of a user else creating the specified
+        user with email and password provided """
     try:
         email = request.form.get('email')
         password = request.form.get('password')
@@ -25,6 +27,23 @@ def users() -> Union[str, Tuple]:
         return jsonify({"email": email, "message": "user created"})
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
+def login() -> Union[str, Tuple]:
+    """ View implementing validating user credentials if
+        correct credentials are given a cookie is set on
+        the response else operation is aborted """
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if AUTH.valid_login(email, password):
+        session_id = AUTH.create_session(email)
+        response = jsonify({"email": email, "message": "logged in"})
+        response.set_cookie("session_id", session_id)
+        return response
+    else:
+        abort(401)
 
 
 if __name__ == "__main__":
