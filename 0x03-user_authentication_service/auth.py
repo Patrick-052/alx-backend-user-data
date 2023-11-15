@@ -60,6 +60,16 @@ class Auth:
         except NoResultFound:
             pass
 
+    def get_reset_password_token(self, email: str) -> str:
+        """ Method that retrieves a user using their email and updates
+            the reset_token with a UUID value if user is present """
+        try:
+            user = self._db.find_user_by(email=email)
+            self._db.update_user(user.id, reset_token=str(uuid4))
+            return user.reset_token
+        except NoResultFound:
+            raise ValueError
+
 
 def _generate_uuid() -> str:
     """ Method that returns a string representation of a new UUID """
