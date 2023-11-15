@@ -17,7 +17,7 @@ def basic_route() -> str:
 
 
 @app.route('/users', methods=['POST'], strict_slashes=False)
-def users() -> Union[str, Tuple]:
+def users() -> Union[str, Tuple[str, int]]:
     """ View implementing existence of a user else creating the specified
         user with email and password provided """
     try:
@@ -31,7 +31,7 @@ def users() -> Union[str, Tuple]:
 
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
-def login() -> Union[str, Tuple]:
+def login() -> str:
     """ View implementing validating user credentials if
         correct credentials are given a cookie is set on
         the response else operation is aborted """
@@ -48,7 +48,7 @@ def login() -> Union[str, Tuple]:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout() -> Union[str, Tuple]:
+def logout() -> str:
     """ View that destroys user's session thus login them out """
     session_id = request.cookies.get('session_id')
     user = AUTH.get_user_from_session_id(session_id)
@@ -61,7 +61,7 @@ def logout() -> Union[str, Tuple]:
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
-def profile() -> Tuple:
+def profile() -> Tuple[str, int]:
     """ View that Informs presence of a user object or not in
         the database """
     session_id = request.cookies.get('session_id')
@@ -74,7 +74,7 @@ def profile() -> Tuple:
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
-def get_reset_password_token() -> str:
+def get_reset_password_token() -> Tuple[str, int]:
     """ View that validates if an email is registered by generating a
         reset_token else it aborts with 403 status code """
     email = request.form.get('email')
@@ -83,7 +83,7 @@ def get_reset_password_token() -> str:
         abort(403)
     else:
         token = AUTH.get_reset_password_token(email)
-        return jsonify({"email": f"{email}", "reset_token": f"{token}"})
+        return jsonify({"email": f"{email}", "reset_token": f"{token}"}), 200
 
 
 if __name__ == "__main__":
