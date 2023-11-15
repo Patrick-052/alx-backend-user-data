@@ -77,12 +77,13 @@ def profile() -> Tuple:
 def get_reset_password_token() -> str:
     """ View that validates if an email is registered by generating a
         reset_token else it aborts with 403 status code """
-    try:
-        email = request.form.get('email')
-        reset_token = AUTH.get_reset_password_token(email)
-        return jsonify({"email": email, "reset_token": reset_token}), 200
-    except NoResultFound:
+    email = request.form.get('email')
+    user = AUTH.create_session(email)
+    if not user:
         abort(403)
+    else:
+        token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": f"{email}", "reset_token": f"{token}"})
 
 
 if __name__ == "__main__":
