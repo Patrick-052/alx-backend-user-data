@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Main file
+Main Entry file
 """
 
 from db import DB
