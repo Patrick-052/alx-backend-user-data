@@ -55,7 +55,7 @@ def logout() -> Union[str, Tuple]:
 
     if user:
         AUTH.destroy_session(user.id)
-        return redirect(url_for('basic_route'))
+        return redirect('/')
     else:
         abort(403)
 
