@@ -34,7 +34,7 @@ class Auth:
             return False
 
     def create_session(self, email: str) -> Union[str, None]:
-        """ Method that returns session_id based on the user """
+        """ Method that returns session id based on the user """
         try:
             user = self._db.find_user_by(email=email)
             uid = _generate_uuid()
