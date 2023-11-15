@@ -61,7 +61,7 @@ def logout() -> str:
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
-def profile() -> Tuple[str, int]:
+def profile() -> Union[Tuple[str, int], None]:
     """ View that Informs presence of a user object or not in
         the database """
     session_id = request.cookies.get('session_id')
@@ -74,7 +74,7 @@ def profile() -> Tuple[str, int]:
 
 
 @app.route('/reset_password', methods=['POST'], strict_slashes=False)
-def get_reset_password_token() -> Tuple[str, int]:
+def get_reset_password_token() -> Union[Tuple[str, int], None]:
     """ View that validates if an email is registered by generating a
         reset_token else it aborts with 403 status code """
     email = request.form.get('email')
@@ -84,6 +84,20 @@ def get_reset_password_token() -> Tuple[str, int]:
     else:
         token = AUTH.get_reset_password_token(email)
         return jsonify({"email": f"{email}", "reset_token": f"{token}"}), 200
+
+
+@app.route('/reset_password', methods=['PUT'], strict_slashes=False)
+def update_password() -> Union[Tuple[str, int], None]:
+    """ View that implements updating passwords """
+    email = request.form.get('email')
+    reset_token = request.form.get('reset_token')
+    password = request.form.get('new_password')
+
+    try:
+        AUTH.update_password(reset_token, password)
+        return jsonify({"email": email, "message": "Password updated"}), 200
+    except NoResultFound:
+        abort(403)
 
 
 if __name__ == "__main__":
