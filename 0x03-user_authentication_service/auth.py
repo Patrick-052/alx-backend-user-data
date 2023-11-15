@@ -4,6 +4,7 @@
 from db import DB
 from user import User
 from uuid import uuid4
+from typing import Union
 from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -32,7 +33,7 @@ class Auth:
         except NoResultFound:
             return False
 
-    def create_session(self, email: str) -> str:
+    def create_session(self, email: str) -> Union[str, None]:
         """ Method that returns session_id based on the user """
         try:
             user = self._db.find_user_by(email=email)
@@ -40,6 +41,13 @@ class Auth:
 
             self._db.update_user(user.id, session_id=uid)
             return user.session_id
+        except NoResultFound:
+            return None
+
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+        """ Method that returns a user object based on session id """
+        try:
+            return self._db.find_user_by(session_id=session_id)
         except NoResultFound:
             return None
 
